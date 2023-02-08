@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-slate-900">
+    <div class="max-w-screen-md mx-auto mt-32" x-data="app()">
+        <div class="flex items-center justify-center gap-4">
+            <input x-model="username" placeholder="Search by username" class="bg-slate-800 text-slate-50 py-4 px-3 w-full max-w-md rounded-md border border-slate-700">
+            <button @click="search()" class="bg-cyan-300 text-emerald-900 py-4 px-3 rounded-md">Search</button>
+        </div>
+
+        <template x-if="user">
+            <div class="py-10 px-6 text-center xl:px-10">
+              <div class="space-y-6 xl:space-y-10">
+                <img class="mx-auto h-40 w-40 rounded-full xl:h-56 xl:w-56" :src="user.avatar" alt="">
+                <div class="space-y-2">
+                  <div class="space-y-1 text-lg font-medium leading-6">
+                    <h3 class="text-white" x-text="user.name"></h3>
+                    <p class="text-indigo-400" x-text="user.title"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </template>
+    </div>
+    <script>
+        document.addEventListener('alpine:init', () => {
+        Alpine.data('app', () => ({
+            username: "",
+            user: null,
+            search() {
+                fetch(`http://127.0.0.1:5000/user/${this.username}`).then(res => res.json()).then(data => {
+                    this.user = data
+                })
+            }
+           
+        }))
+    })
+    </script>
+</body>
+</html>
